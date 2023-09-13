@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"avdotchenkov.docker.regular","l":"Decorator"},{"p":"avdotchenkov.docker.sample","l":"Main"},{"p":"avdotchenkov.docker.regular","l":"OtherClass"},{"p":"avdotchenkov.docker.java_core_VS_2","l":"Program"}];updateSearchResults();

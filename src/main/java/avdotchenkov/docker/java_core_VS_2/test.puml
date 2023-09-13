@@ -1,0 +1,100 @@
+@startuml
+
+title Предварительное бронирование и бронирование сервиса
+
+actor Клиент as client
+actor Система as system
+participant "Поставщик 1" as supplier1
+participant "Поставщик 2" as supplier2
+participant "Поставщик 3" as supplier3
+participant Корзина as cart
+
+client -> system: Поиск предложений
+alt Найдено предложение
+    system -> supplier1: Получить предложения
+    supplier1 --> system: Предложения
+    system -> supplier2: Получить предложения
+    supplier2 --> system: Предложения
+    system -> supplier3: Получить предложения
+    supplier3 --> system: Предложения
+    system --> client: Отобразить предложения
+else Ничего не найдено
+    system --> client: Предложений нет
+end
+
+client -> system: Добавить предложение в корзину
+system -> cart: Добавить в корзину
+cart --> system: Подтверждение добавления
+
+client -> system: Бронировать сервис
+alt Предварительная бронь
+    system -> supplier1: Проверить наличие и цену
+    supplier1 --> system: Данные по наличию и цене
+    else Услуга отсутствует?-ДА
+        client -> system: Запросить замену
+        system --> client: Замена на другую услугу?
+    else Согласен? - ДА)
+            system -> supplier2: Проверить наличие и цену
+            supplier2 --> system: Данные по наличию и цене
+            system --> client: Отобразить данные по наличию и цене
+        else (Условия не подошли)
+            system --> client: Отменить заказ
+        else
+    else  (Условия не подошли)
+        system --> client: Отобразить данные по наличию и цене
+    else
+else Обычная бронь
+    system -> supplier1: Сделать запрос на обновление цены
+    supplier1 --> system: Новая цена (если есть изменения)
+    else Услуга отсутствует? -ДА
+        client -> system: Запросить замену
+        system --> client: Замена на другую услугу?
+        else Согласен на замену?
+            system -> supplier2: Сделать запрос на обновление цены
+            supplier2 --> system: Новая цена (если есть изменения)
+            system --> client: Отобразить новую цену (если есть изменения)
+        else (НЕТ)
+            system --> client: Отменить заказ
+        else
+    else (ДА)
+        system --> client: Отобразить новую цену (если есть изменения)
+end
+
+client -> system: Оплатить сервис
+alt Успешная оплата
+    system -> supplier1: Создать заказ
+    supplier1 --> system: Заказ создан
+    system -> supplier2: Создать заказ
+    supplier2 --> system: Заказ создан
+    system -> supplier3: Создать заказ
+    supplier3 --> system: Заказ создан
+    system -> supplier1: Оплатить заказ
+    alt Оплата прошла успешно
+        supplier1 --> system: Заказ оплачен
+    else Ошибка при оплате
+        system --> client: Ошибка при оплате
+        system -> supplier1: Отменить заказ
+        supplier1 --> system: Заказ отменен
+        system -> supplier2: Отменить заказ
+        supplier2 --> system: Заказ отменен
+        system -> supplier3: Отменить заказ
+        supplier3 --> system: Заказ отменен
+        system -> cart: Очистить корзину
+        cart --> system: Корзина очищена
+        system --> client: Отобразить сообщение об ошибке и предложить повторить попытку
+    end
+    system --> client: Сервис забронирован
+else Ошибка при оплате
+    system --> client: Ошибка при оплате
+    system -> supplier1: Отменить заказ
+    supplier1 --> system: Заказ отменен
+    system -> supplier2: Отменить заказ
+    supplier2 --> system: Заказ отменен
+    system -> supplier3: Отменить заказ
+    supplier3 --> system: Заказ отменен
+    system -> cart: Очистить корзину
+    cart --> system: Корзина очищена
+    system --> client: Отобразить сообщение об ошибке и предложить повторить попытку
+end
+
+@enduml

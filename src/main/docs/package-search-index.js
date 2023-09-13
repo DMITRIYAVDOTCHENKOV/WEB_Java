@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"avdotchenkov.docker.java_core_VS_2"},{"l":"avdotchenkov.docker.regular"},{"l":"avdotchenkov.docker.sample"}];updateSearchResults();
